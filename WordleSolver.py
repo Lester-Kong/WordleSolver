@@ -32,6 +32,7 @@ def removeWord(possible_words, result, guess):
             elif correct_letters[x] in word and word[x] != correct_letters[x] and word not in wordsToRemove:
                 wordsToRemove.append(word)
 
+
     for x in wrong_letters:
         for word in possible_words:
             if wrong_letters[x] in word and word not in wordsToRemove:                       #if the word contains a wrong letter and the word is not tagged for removal
@@ -45,13 +46,19 @@ def removeWord(possible_words, result, guess):
                 else:
                     wordsToRemove.append(word)
 
+
     for word in possible_words:
         for x in partial_letters:
             if partial_letters[x] not in word and word not in wordsToRemove:
                 wordsToRemove.append(word)
+            elif partial_letters[x] in word and partial_letters[x] in correct_letters.values():
+                if word.count(partial_letters[x]) == 1 and word not in wordsToRemove:
+                    wordsToRemove.append(word)
+                elif partial_letters[x] in word and word[x] == partial_letters[x] and word not in wordsToRemove:
+                    wordsToRemove.append(word)
             elif partial_letters[x] in word and word[x] == partial_letters[x] and word not in wordsToRemove:
                 wordsToRemove.append(word)
-            
+
     for word in wordsToRemove:
         possible_words.remove(word)
         
@@ -111,6 +118,7 @@ def wordleSolver(possible_words):
                 break
             frequencies = letterFreq(possible_words)
             guess = bestWord(possible_words, frequencies)
+            print(possible_words)
             print("The next recommended word is:", guess)
             print("Please enter the result here:")
             result = input()
