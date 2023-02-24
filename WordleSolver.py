@@ -24,7 +24,23 @@ def removeWord(possible_words, result, guess):
     wrong_letters = wrongLetters(result, guess)
     partial_letters = partialLetters(result, guess)
     correct_letters = correctLetters(result, guess)
+    partial_letter_freq = {}
+    
+    for x in partial_letters:                                                                               #A special case for when there are multiple partial letter occurrences for the same letter
+        if partial_letters[x] in partial_letter_freq:                                                       #This loop will create a dictionary for each partial letter and how many times it occurs in the chosen word
+            partial_letter_freq[partial_letters[x]] = partial_letter_freq[partial_letters[x]] + 1
+        elif partial_letters[x] not in partial_letter_freq:
+            partial_letter_freq.update({partial_letters[x] : 1})
 
+    for x in partial_letter_freq:                                                                           #This loop will remove words based on how many partial letters are in the word.
+        if partial_letter_freq[x] >= 2:                                                                     #This must be done first as the wrong_letter loop makes use of the partial_letter dictionary
+            for word in possible_words:                                                                     #and cannot be included in the process of removing words based on duplicate partial letters.
+                if x not in word and word not in wordsToRemove:
+                    wordsToRemove.append(word)
+                elif x in word and word.count(x) == 1 and word not in wordsToRemove:
+                    wordsToRemove.append(word)
+            
+    
     for word in possible_words:
         for x in correct_letters:
             if correct_letters[x] not in word and word not in wordsToRemove:
